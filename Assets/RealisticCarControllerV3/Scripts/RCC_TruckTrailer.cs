@@ -144,7 +144,7 @@ public class RCC_TruckTrailer : MonoBehaviour {
 
 	void Update(){
 
-		if(rigid.velocity.magnitude < .01f && Mathf.Abs(rigid.angularVelocity.magnitude) < .01f)
+		if(rigid.linearVelocity.magnitude < .01f && Mathf.Abs(rigid.angularVelocity.magnitude) < .01f)
 			isSleeping = true;
 		else
 			isSleeping = false;

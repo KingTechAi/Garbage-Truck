@@ -25,7 +25,7 @@ public class PedestrianController : MonoBehaviour {
 
 	void UpdateSpeed(out float carSpeed)
 	{
-		carSpeed = body.velocity.z;
+		carSpeed = body.linearVelocity.z;
 	}
 	
 	void OnAIUpdate(float steering, float brake, float throttle, bool isUpSideDown ){

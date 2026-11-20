@@ -506,7 +506,7 @@ public class RCC_SceneManager : MonoBehaviour {
 
 		if (activePlayerVehicle) {
 
-			activePlayerVehicle.rigid.velocity = Vector3.zero;
+			activePlayerVehicle.rigid.linearVelocity = Vector3.zero;
 			activePlayerVehicle.rigid.angularVelocity = Vector3.zero;
 
 			activePlayerVehicle.transform.position = position;
@@ -526,7 +526,7 @@ public class RCC_SceneManager : MonoBehaviour {
 
 		if (vehicle) {
 
-			vehicle.rigid.velocity = Vector3.zero;
+			vehicle.rigid.linearVelocity = Vector3.zero;
 			vehicle.rigid.angularVelocity = Vector3.zero;
 
 			vehicle.transform.position = position;

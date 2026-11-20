@@ -476,7 +476,7 @@ public class TSSimpleCar : MonoBehaviour {
 
 				// up to twice it's pitch, where it will suddenly drop when it switches gears.
 				for (int i = 0; i < bodies.Length;i++){
-					float mass_center = Mathf.Clamp((((bodies[i].velocity.magnitude - 10) / 35f)),-1.00f,2f);
+					float mass_center = Mathf.Clamp((((bodies[i].linearVelocity.magnitude - 10) / 35f)),-1.00f,2f);
 					bodies[i].centerOfMass = new Vector3(bodies[i].centerOfMass.x, -mass_center,bodies[i].centerOfMass.z);
 					body.centerOfMass = new Vector3(bodies[i].centerOfMass.x, -mass_center,bodies[i].centerOfMass.z);
 				}
@@ -664,7 +664,7 @@ public class TSSimpleCar : MonoBehaviour {
 	/// <param name="steering">Steering.</param>
 	void SuperSimplePhysicsUpdate(float throttle, float steering)
 	{
-		velo = body.velocity;
+		velo = body.linearVelocity;
 		tempVec = new Vector3(velo.x,0,velo.z);
 		flatVelo = tempVec;
 		dir = myTransform.TransformDirection(Vector3.forward);
@@ -694,19 +694,19 @@ public class TSSimpleCar : MonoBehaviour {
 				Quaternion deltaRot = Quaternion.Euler(new Vector3(0,turnSpeed * steering ,0));
 				body.MoveRotation(body.rotation * deltaRot);
 			}
-			if (brake >0 && body.velocity.sqrMagnitude > 0)
+			if (brake >0 && body.linearVelocity.sqrMagnitude > 0)
 			{
 				if (frontWheels != null && frontWheels.Length >0)
-					body.AddForceAtPosition((-(body.velocity.normalized)) * brakeTorque * brake * Time.deltaTime*timeStepFactor,new Vector3(myTransform.position.x, FrontWheels[0].transform.position.y, myTransform.position.z));
+					body.AddForceAtPosition((-(body.linearVelocity.normalized)) * brakeTorque * brake * Time.deltaTime*timeStepFactor,new Vector3(myTransform.position.x, FrontWheels[0].transform.position.y, myTransform.position.z));
 				else
 					body.AddForce(Mathf.Sign(localspeed.z) * (-(flatDir)) * brakeTorque * 10 * body.mass * brake * Time.deltaTime*timeStepFactor);
 			}
 			body.AddForce(impulse * Time.deltaTime*timeStepFactor);
-		}else mySpeed = body.velocity.magnitude;
+		}else mySpeed = body.linearVelocity.magnitude;
 		myAccel = ( speed-lastSpeed)/Time.deltaTime;
-		if (myAccel > maxAcceleration)body.drag +=0.1f;
-		else if(body.drag >0.1f)body.drag -=0.1f;
-		if (body.drag < speed/ 125f)body.drag = speed/ 125f;
+		if (myAccel > maxAcceleration)body.linearDamping +=0.1f;
+		else if(body.linearDamping >0.1f)body.linearDamping -=0.1f;
+		if (body.linearDamping < speed/ 125f)body.linearDamping = speed/ 125f;
 		lastSpeed = speed;
 	}
 
@@ -812,7 +812,7 @@ public class TSSimpleCar : MonoBehaviour {
 	/// <param name="carSpeed">Car speed.</param>
 	public void UpdateCarSpeed( out float carSpeed)
 	{
-			localspeed = myTransform.InverseTransformDirection(body.velocity);
+			localspeed = myTransform.InverseTransformDirection(body.linearVelocity);
 			speed = carSpeed = localspeed.magnitude;// Mathf.Abs(myTransform.InverseTransformDirection(body.velocity).z);
 	}
 

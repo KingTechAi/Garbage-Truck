@@ -245,7 +245,7 @@ public class RCC_Camera : MonoBehaviour{
 		playerSpeed = Mathf.Lerp(playerSpeed, playerCar.speed, Time.deltaTime * 5f);
 
 		// Velocity of the vehicle.
-		playerVelocity = playerCar.transform.InverseTransformDirection(playerRigid.velocity);
+		playerVelocity = playerCar.transform.InverseTransformDirection(playerRigid.linearVelocity);
 
 		// Lerping current field of view to target field of view.
 		thisCam.fieldOfView = Mathf.Lerp (thisCam.fieldOfView, targetFieldOfView, Time.deltaTime * 5f);
@@ -503,7 +503,7 @@ public class RCC_Camera : MonoBehaviour{
 		// Set the position of the camera on the x-z plane to distance meters behind the target.
 		targetPosition = playerCar.transform.position;
 		targetPosition -= (currentRotation * orbitRotation) * Vector3.forward * TPSDistance;
-		targetPosition += Vector3.up * (TPSHeight * Mathf.Lerp(1f, .75f, (playerRigid.velocity.magnitude * 3.6f) / 100f));
+		targetPosition += Vector3.up * (TPSHeight * Mathf.Lerp(1f, .75f, (playerRigid.linearVelocity.magnitude * 3.6f) / 100f));
 
 		transform.position = targetPosition;
 

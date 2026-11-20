@@ -953,9 +953,9 @@ public class RCC_CarControllerV3 : RCC_Core {
 		//Reversing Bool.
 		//if (!externalController){
 
-		if(brakeInput > .9f  && transform.InverseTransformDirection(rigid.velocity).z < 1f && canGoReverseNow && automaticGear && !semiAutomaticGear && !changingGear && direction != -1)
+		if(brakeInput > .9f  && transform.InverseTransformDirection(rigid.linearVelocity).z < 1f && canGoReverseNow && automaticGear && !semiAutomaticGear && !changingGear && direction != -1)
 			StartCoroutine(ChangeGear(-1));
-		else if (throttleInput < .1f && transform.InverseTransformDirection(rigid.velocity).z > -1f && direction == -1 && !changingGear && automaticGear && !semiAutomaticGear)
+		else if (throttleInput < .1f && transform.InverseTransformDirection(rigid.linearVelocity).z > -1f && direction == -1 && !changingGear && automaticGear && !semiAutomaticGear)
 			StartCoroutine(ChangeGear(0));
 
         //}
@@ -1392,7 +1392,7 @@ public class RCC_CarControllerV3 : RCC_Core {
 	private void Engine (){
 		
 		//Speed.
-		speed = rigid.velocity.magnitude * 3.6f;
+		speed = rigid.linearVelocity.magnitude * 3.6f;
 
 		//Steer Limit.
 		steerAngle = Mathf.Lerp(orgSteerAngle, highspeedsteerAngle, (speed / highspeedsteerAngleAtspeed));
@@ -1420,7 +1420,7 @@ public class RCC_CarControllerV3 : RCC_Core {
 			
 			if(brakeInput < .5f && speed < 5)
 				canGoReverseNow = true;
-			else if(brakeInput > 0 && transform.InverseTransformDirection(rigid.velocity).z > 1f)
+			else if(brakeInput > 0 && transform.InverseTransformDirection(rigid.linearVelocity).z > 1f)
 				canGoReverseNow = false;
 			
 		}
@@ -1761,7 +1761,7 @@ public class RCC_CarControllerV3 : RCC_Core {
 		}
 
 		Vector3 v = rigid.angularVelocity;
-		velocityAngle = (v.y * Mathf.Clamp(transform.InverseTransformDirection(rigid.velocity).z, -1f, 1f)) * Mathf.Rad2Deg;
+		velocityAngle = (v.y * Mathf.Clamp(transform.InverseTransformDirection(rigid.linearVelocity).z, -1f, 1f)) * Mathf.Rad2Deg;
 		velocityDirection.localRotation = Quaternion.Lerp(velocityDirection.localRotation, Quaternion.AngleAxis(Mathf.Clamp(velocityAngle / 3f, -45f, 45f), Vector3.up), Time.fixedDeltaTime * 20f);
 		steeringDirection.localRotation = Quaternion.Euler (0f, FrontLeftWheelCollider.wheelCollider.steerAngle, 0f);
 
@@ -1774,13 +1774,13 @@ public class RCC_CarControllerV3 : RCC_Core {
 
 		float angle2 = Quaternion.Angle (velocityDirection.localRotation, steeringDirection.localRotation) * (normalizer);
 
-		rigid.AddRelativeTorque (Vector3.up * ((angle2 * (Mathf.Clamp(transform.InverseTransformDirection(rigid.velocity).z, -10f, 10f) / 1000f)) * steerHelperAngularVelStrength), ForceMode.VelocityChange);
+		rigid.AddRelativeTorque (Vector3.up * ((angle2 * (Mathf.Clamp(transform.InverseTransformDirection(rigid.linearVelocity).z, -10f, 10f) / 1000f)) * steerHelperAngularVelStrength), ForceMode.VelocityChange);
 
 		if (Mathf.Abs(oldRotation - transform.eulerAngles.y) < 10f){
 
 			float turnadjust = (transform.eulerAngles.y - oldRotation) * (steerHelperLinearVelStrength / 2f);
 			Quaternion velRotation = Quaternion.AngleAxis(turnadjust, Vector3.up);
-			rigid.velocity = (velRotation * rigid.velocity);
+			rigid.linearVelocity = (velRotation * rigid.linearVelocity);
 
 		}
 
@@ -1796,7 +1796,7 @@ public class RCC_CarControllerV3 : RCC_Core {
 		if (!isGrounded)
 			return;
 
-		Vector3 velocity = rigid.velocity;
+		Vector3 velocity = rigid.linearVelocity;
 		velocity -= transform.up * Vector3.Dot(velocity, transform.up);
 		velocity.Normalize();
 
@@ -1823,7 +1823,7 @@ public class RCC_CarControllerV3 : RCC_Core {
 	/// </summary>
 	private void AngularDragHelper(){
 
-		rigid.angularDrag = Mathf.Lerp (0f, 10f, (speed * angularDragHelperStrength) / 1000f);
+		rigid.angularDamping = Mathf.Lerp (0f, 10f, (speed * angularDragHelperStrength) / 1000f);
 
 	}
 

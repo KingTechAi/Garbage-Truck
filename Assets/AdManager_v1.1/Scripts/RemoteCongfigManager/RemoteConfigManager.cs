@@ -1,18 +1,18 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.RemoteConfig;
+using Unity.Services.Authentication;
+using Unity.Services.Core;
+using Unity.Services.RemoteConfig;
 using UnityEngine;
 
 
 public struct UserAttributes
 {
-        
+
 }
-    
+
 public struct AppAttributes
 {
-    
+
 }
 
 
@@ -22,6 +22,7 @@ public class RemoteConfigManager : MonoBehaviour
     public GameObject adsManager;
 
     [HideInInspector] public bool isAdsEnable;
+
     private void Awake()
     {
         if (instance == null)
@@ -33,24 +34,50 @@ public class RemoteConfigManager : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(this.gameObject);
-        
-        ConfigManager.FetchCompleted += AdsStatus;
-        ConfigManager.FetchConfigs<UserAttributes,AppAttributes>(new UserAttributes(), new AppAttributes());
+
+        FetchAdsStatus();
     }
-    
-    void AdsStatus(ConfigResponse response)
+
+    private async void FetchAdsStatus()
     {
-        bool AdsEnable = ConfigManager.appConfig.GetBool("EnableAds");
+        try
+        {
+            if (UnityServices.State != ServicesInitializationState.Initialized)
+            {
+                await UnityServices.InitializeAsync();
+            }
+
+            if (!AuthenticationService.Instance.IsSignedIn)
+            {
+                await AuthenticationService.Instance.SignInAnonymouslyAsync();
+            }
+
+            RuntimeConfig config = await RemoteConfigService.Instance.FetchConfigsAsync(new UserAttributes(), new AppAttributes());
+            AdsStatus(config.GetBool("EnableAds", true));
+        }
+        catch (Exception exception)
+        {
+            // Without a bound Unity project and a deployed config there is nothing to fetch,
+            // so leave ads exactly as they are authored in the scene.
+            Debug.LogWarning("Remote Config fetch failed, keeping the scene's ad settings. " + exception.Message);
+        }
+    }
+
+    void AdsStatus(bool AdsEnable)
+    {
+        if (adsManager == null)
+        {
+            return;
+        }
+
         isAdsEnable = AdsEnable;
         if (!AdsEnable)
         {
-            
-                Destroy(adsManager.gameObject);
-
+            Destroy(adsManager.gameObject);
         }
         else
         {
-            adsManager.SetActive(true);            
+            adsManager.SetActive(true);
         }
     }
 }
