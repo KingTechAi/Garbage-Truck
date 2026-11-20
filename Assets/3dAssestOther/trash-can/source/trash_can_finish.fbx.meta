@@ -1,0 +1,195 @@
+fileFormatVersion: 2
+guid: b27eb1aaaa22c8f41a6eef8a70d05d64
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: cap
+    100002: cap 1
+    100004: cap1
+    100006: group
+    100008: group1
+    100010: group2
+    100012: //RootNode
+    100014: trash_can_finish
+    100016: trash_can_finish 1
+    100018: trash_can_finish1
+    100020: wheel_1
+    100022: wheel_1 1
+    100024: wheel_2
+    100026: wheel_2 1
+    100028: wheel_3
+    100030: wheel_3 1
+    100032: wheel_4
+    100034: wheel_4 1
+    100036: wheel_5
+    100038: wheel_6
+    100040: wheel_7
+    100042: wheel_8
+    400000: cap
+    400002: cap 1
+    400004: cap1
+    400006: group
+    400008: group1
+    400010: group2
+    400012: //RootNode
+    400014: trash_can_finish
+    400016: trash_can_finish 1
+    400018: trash_can_finish1
+    400020: wheel_1
+    400022: wheel_1 1
+    400024: wheel_2
+    400026: wheel_2 1
+    400028: wheel_3
+    400030: wheel_3 1
+    400032: wheel_4
+    400034: wheel_4 1
+    400036: wheel_5
+    400038: wheel_6
+    400040: wheel_7
+    400042: wheel_8
+    2100000: trash_can_mat
+    2300000: cap
+    2300002: cap 1
+    2300004: cap1
+    2300006: trash_can_finish
+    2300008: trash_can_finish 1
+    2300010: trash_can_finish1
+    2300012: wheel_1
+    2300014: wheel_1 1
+    2300016: wheel_2
+    2300018: wheel_2 1
+    2300020: wheel_3
+    2300022: wheel_3 1
+    2300024: wheel_4
+    2300026: wheel_4 1
+    2300028: wheel_5
+    2300030: wheel_6
+    2300032: wheel_7
+    2300034: wheel_8
+    3300000: cap
+    3300002: cap 1
+    3300004: cap1
+    3300006: trash_can_finish
+    3300008: trash_can_finish 1
+    3300010: trash_can_finish1
+    3300012: wheel_1
+    3300014: wheel_1 1
+    3300016: wheel_2
+    3300018: wheel_2 1
+    3300020: wheel_3
+    3300022: wheel_3 1
+    3300024: wheel_4
+    3300026: wheel_4 1
+    3300028: wheel_5
+    3300030: wheel_6
+    3300032: wheel_7
+    3300034: wheel_8
+    4300000: trash_can_finish1
+    4300002: cap1
+    4300004: wheel_8
+    4300006: wheel_7
+    4300008: wheel_6
+    4300010: wheel_5
+    4300012: trash_can_finish
+    4300014: cap
+    4300016: wheel_1
+    4300018: wheel_3
+    4300020: wheel_2
+    4300022: wheel_4
+    4300024: trash_can_finish
+    4300026: cap
+    4300028: wheel_1
+    4300030: wheel_3
+    4300032: wheel_2
+    4300034: wheel_4
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: trash_can_mat
+    second: {fileID: 2100000, guid: 69d987e2687fee141bf627030ae75c82, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1.5
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 0
+    importBlendShapes: 0
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 1
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 75
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
