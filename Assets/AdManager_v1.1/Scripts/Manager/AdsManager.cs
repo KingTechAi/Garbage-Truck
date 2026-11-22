@@ -1,262 +1,100 @@
-﻿using GoogleMobileAds.Api;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.RemoteConfig;
+﻿using MangoMango.Advertisement;
 using UnityEngine;
-using UnityEngine.Advertisements;
 
+// Gameplay still calls this API (MainMenu / GameManger). The Google Mobile Ads and Unity Ads
+// SDKs are gone; every call is now forwarded to the AppLovin MAX manager, which reads all of its
+// switches and IDs from Remote Config.
 public class AdsManager : MonoBehaviour
 {
     public static AdsManager instance;
 
-    #region UNITY Variables
-
-    [Space]
-    [Header("Testing Ads")]
-    //========== Is Ads Testing =============
+    // Kept so the existing _AdsManager prefab instance keeps its serialized data valid.
     public bool TestAds;
-
     public bool isThreeId;
 
-    [Header("AdMob IDs")]
-    //========== Admob Android Ids ==========
-
     public string AdmobAppId;
-
     public string[] AdmobBannerId;
-    
     public string[] AdmobSquareBannerId;
-
     public string[] AdmobInterstitialId;
-
     public string AdmobInterstitialRewardedId;
-
     public string[] AdmobRewardedVideoId;
 
-    [Header("Unity Ad ID")]
-    //========== Unity Ad ids =============
     public string UnityGameID;
     public string UnityBannerID;
     public string UnityInterstitialID;
     public string UnityRewardedID;
 
-
-    [Space]
-    [Header("Banner Ads Position")]
-    //========== Banner Ads Position =============
-    public AdPosition Admob_Banner_Position = AdPosition.Bottom;
-    public BannerPosition Unity_Banner_Position = BannerPosition.BOTTOM_CENTER;
-
-    [Space]
-    [Header("Banner Ads Size")]
-    //========== Banner Ads Size =============
     public bool Admob_Banner_Simple;
     public bool Admob_Banner_Smart;
 
-
-
-    [Header("Scripts Reff")]
-    //========== Is Ads Testing =============
     public GameObject GoogleAds;
     public GameObject UnityAds;
 
+    private static ApplovinAdManager Ads => ApplovinAdManager.Instance;
 
-    //========== Don't Change Any code From here to down =============
-    GoogleAdMobManager Google_Ads_Manager;
-    BannerAdUnity Unity_Banner_Manager;
-    InterstitialAdUnity Unity_Interstitial_Manager;
-    RewardedAdsUnity Unity_Rewarded_Manager;
-
-    
- 
-    
-    
-    #endregion
-
-
-    #region UNITY Mathod
-    
-    void Awake()
+    private void Awake()
     {
         if (instance == null)
         {
             instance = this;
+            if (transform.parent == null)
+            {
+                DontDestroyOnLoad(gameObject);
+            }
         }
-        else if (instance != null)
+        else if (instance != this)
         {
-            Destroy(gameObject);
+            Destroy(this);
         }
-        DontDestroyOnLoad(this.gameObject);
-
-        
     }
 
-    
+    public void AdsInit() { }
 
-    private void Start()
-    {
-        
-        
-        Google_Ads_Manager = GoogleAds.GetComponent<GoogleAdMobManager>();
-        Unity_Banner_Manager = UnityAds.GetComponent<BannerAdUnity>();
-        Unity_Interstitial_Manager = UnityAds.GetComponent<InterstitialAdUnity>();
-        Unity_Rewarded_Manager = UnityAds.GetComponent<RewardedAdsUnity>();
+    #region Banner
+    public void Show_AdMob_Banner() => Ads?.ShowBanner();
+    public void Show_AdMob_RectangleBanner() => Ads?.ShowMRecBanner();
+    public void Hide_AdMob_Banner() => Ads?.HideBanner();
+    public void Hide_AdMob_RectangleBanner() => Ads?.HideMRecBanner();
+    public void Destroy_AdMob_Banner() => Ads?.HideBanner();
 
-
-        if (TestAds == true)
-        {
-            // Admob_Test_Ads 
-
-            AdmobAppId = "ca-app-pub-7906320304267948~9371111224";
-            AdmobBannerId[0] = "ca-app-pub-3940256099942544/6300978111";
-            AdmobSquareBannerId[0] = "ca-app-pub-3940256099942544/6300978111";
-            AdmobInterstitialId[0] = "ca-app-pub-3940256099942544/1033173712";
-            AdmobInterstitialRewardedId = "ca-app-pub-3940256099942544/5354046379";
-            AdmobRewardedVideoId[0] = "ca-app-pub-3940256099942544/5224354917";
-
-            // Unity_Test_Ads 
-
-            UnityGameID = "4869016";
-            UnityBannerID = "Banner_iOS";
-            UnityInterstitialID = "Interstitial_iOS";
-            UnityRewardedID = "Rewarded_iOS";
-            
-        }
-        Invoke(nameof(AdsInit),0.2f);
-    }
-
-    public void AdsInit()
-    {
-        GoogleAds.SetActive(true);
-        UnityAds.SetActive(true);
-        
-       
-    }
+    public void Show_Unity_Banner() => Ads?.ShowBanner();
+    public void Hide_Unity_Banner() => Ads?.HideBanner();
     #endregion
 
+    #region Interstitial / Rewarded
+    // ShowStrategyAd applies AdStrategyMode, AdDeliveryType, EnableAds and every placement switch
+    // from Remote Config, so the old hard-coded call sites stay behaviour-driven by the dashboard.
+    public void Show_AdMob_Interstitial() => Ads?.ShowStrategyAd("Gameplay");
+    public void Show_Unity_Interstitial() => Ads?.ShowStrategyAd("Gameplay");
+    public void Show_AdMob_Interstitial_Rewarded() => Ads?.ShowStrategyAd("Gameplay");
+    public void Show_Unity_Rewarded() => Ads?.ShowStrategyAd("Rewarded");
+    public void Show_AdMob_Rewarded() => Ads?.ShowRewardedAd(null);
 
-    #region Ads Calling
+    // The gameplay placements below read their own Remote Config switches, so Pause / LevelComplete /
+    // AdToLoadInGame can each be turned off from the dashboard. When a key is not published the
+    // switch defaults to on, which keeps the current behaviour.
+    public void Show_GameplayStart_Ad() => ShowPlacementAd(RCBool.AdToLoadInGame, "LevelStart");
+    public void Show_Pause_Ad() => ShowPlacementAd(RCBool.Pause, "Pause");
+    public void Show_LevelComplete_Ad() => ShowPlacementAd(RCBool.LevelComplete, "LevelComplete");
 
-    //---------------------- Admob Calling -------------------------
+    private static void ShowPlacementAd(RCBool placement, string context)
+    {
+        var remoteConfig = MangoMango.Advertisement.RemoteConfigManager.Instance;
+        if (remoteConfig != null && !remoteConfig.GetBool(placement, true))
+        {
+            Debug.Log($"[AdsManager] Placement '{placement}' is FALSE in Remote Config -> {context} ad skipped.");
+            return;
+        }
 
-    // Banner Admob
-    public void Show_AdMob_Banner()
-    {
-        Google_Ads_Manager.ShowBannerAdmob();
-    }
-    
-    public void Show_AdMob_RectangleBanner()
-    {
-        Google_Ads_Manager.ShowRectangleBannerAdmob();
-    }
-
-    public void Hide_AdMob_Banner()
-    {
-        Google_Ads_Manager.HideBannerAdmob();
-    }
-    
-    public void Hide_AdMob_RectangleBanner()
-    {
-        Google_Ads_Manager.HideRectangleAdmob();
-    }
-    
-    public void Destroy_AdMob_Banner()
-    {
-        Google_Ads_Manager.DestroyBannerAdAdmob();
+        Ads?.ShowStrategyAd(context);
     }
 
-    // Interstitial Admob
-
-    public void Show_AdMob_Interstitial()
-    {
-        Google_Ads_Manager.ShowInterstitialAd();
-    }
-
-    // Interstitial Admob
-
-    public void Show_AdMob_Interstitial_Rewarded()
-    {
-        Google_Ads_Manager.ShowRewardedInterstitialAd();
-    }
-
-    // Rewarded Admob
-
-    public void Show_AdMob_Rewarded()
-    {
-        Google_Ads_Manager.ShowRewardedAd();
-    }
-
-
-    //---------------------- Unity Calling -------------------------
-
-    // Banner Unity
-    public void Show_Unity_Banner()
-    {
-        Unity_Banner_Manager.ShowBannerAd();
-    }
-
-    public void Hide_Unity_Banner()
-    {
-        Unity_Banner_Manager.HideBannerAd();
-    }
-    
-
-    // Interstitial Unity
-
-    public void Show_Unity_Interstitial()
-    {
-        Unity_Interstitial_Manager.ShowAd();
-    }
-
-    // Rewarded Unity
-
-    public void Show_Unity_Rewarded()
-    {
-        Unity_Rewarded_Manager.ShowAd();
-    }
-
+    public bool rewardCheck() => Ads != null && Ads.IsRewardedAdAvailable();
     #endregion
 
-    public void OnInterstialOpening()
-    {
-        DisableListners();
-    }
-    
-    public void OnInterstialClosed()
-    {
-        EnableListners();
-    }
+    public void OnInterstialOpening() { }
+    public void OnInterstialClosed() { }
 
-    public bool rewardCheck()
-    {
-        if (Google_Ads_Manager.rewardedAd.IsLoaded())
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-
-        }
-    }
-
-    public void EnableListners()
-    {
-        var listnersObj = FindObjectsOfType<AudioListener>();
-
-        foreach (var listener in listnersObj)
-        {
-            listener.enabled = true;
-        }
-    }
-    
-    public void DisableListners()
-    {
-        var listnersObj = FindObjectsOfType<AudioListener>();
-
-        foreach (var listener in listnersObj)
-        {
-            listener.enabled = false;
-        }
-    }
+    public void EnableListners() { }
+    public void DisableListners() { }
 }

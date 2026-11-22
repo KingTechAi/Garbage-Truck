@@ -41,7 +41,7 @@ public class GameManger : MonoBehaviour
         }
         
         if(AdsManager.instance)
-            AdsManager.instance.Show_AdMob_Interstitial();
+            AdsManager.instance.Show_GameplayStart_Ad();
 
     }
 
@@ -63,7 +63,7 @@ public class GameManger : MonoBehaviour
         GameOverCanvus.SetActive(true);
         Debug.Log("complete");
         if(AdsManager.instance)
-            AdsManager.instance.Show_AdMob_Interstitial();
+            AdsManager.instance.Show_LevelComplete_Ad();
         
     }
     
@@ -74,7 +74,7 @@ public class GameManger : MonoBehaviour
         Time.timeScale = 0;
         
         if(AdsManager.instance)
-            AdsManager.instance.Show_AdMob_Interstitial();
+            AdsManager.instance.Show_Pause_Ad();
     }
 
     public void PauseHome()

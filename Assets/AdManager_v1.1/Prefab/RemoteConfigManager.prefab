@@ -9,7 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1986916682475430437}
-  - component: {fileID: 1986916682475430436}
+  - component: {fileID: 1986916682475430440}
+  - component: {fileID: 1986916682475430441}
+  - component: {fileID: 1986916682475430442}
   m_Layer: 0
   m_Name: RemoteConfigManager
   m_TagString: Untagged
@@ -32,7 +34,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1986916682475430436
+--- !u!114 &1986916682475430440
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,7 +43,89 @@ MonoBehaviour:
   m_GameObject: {fileID: 1986916682475430438}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 740d0521af8aaf445aa05d5d919b4eab, type: 3}
+  m_Script: {fileID: 11500000, guid: 13e4b8ec6d64bdf4db23b2d5e9682f14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isAdsEnable: 0
+  TestAds: 0
+  isThreeId: 0
+  AdmobAppId: 
+  AdmobInterstitialRewardedId: 
+  UnityGameID: 
+  UnityBannerID: 
+  UnityInterstitialID: 
+  UnityRewardedID: 
+  Admob_Banner_Simple: 0
+  Admob_Banner_Smart: 0
+--- !u!114 &1986916682475430441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1986916682475430438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48e1dd2a629d8e4469a6e2d6b00c27b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HasFetchedConfig: 0
+  localInterstitialAdUnitId: 76bd07d04c6330fd
+  localRewardedAdUnitId: dbbdb8f006d91a71
+  localBannerAdUnitId: a1e501fc80d19503
+  localControllableBannerAdUnitId: ae9b6fc3d796ff19
+  localMRecAdUnitId: 01c165091ce75803
+  localAppOpenAdUnitId: 52ed65ceead96750
+  localEnableAds: 1
+  localInterstitialCheckAll: 1
+  localBannerCheckAll: 1
+  localRewardCheckAll: 1
+  localShowRewarded: 1
+  localControllableBanner: 1
+  localTopRightFixedBanner: 1
+  localMREC: 1
+  localEnableAppOpenAD: 0
+  localTestAds: 0
+  localControllableBannerPosition: 2
+  localMRECBannerPosition: 0
+  localAdStrategyMode: 2
+  localAdDeliveryType: 3
+  localEventAdFrequency: 2
+  localSystemRewardedCoins: 500
+  localTimeBasedAdInt: 30
+  localLoadingTime: 3
+  localUITransitionDebounceMs: 800
+  localTrackerPollMs: 100
+  localTrackerDebounceMs: 500
+  localTrackerStartDelayMs: 150
+  localTimeBasedAdCountdown: 5
+  localBackNavigationAds: 0
+  localReturnToPreviousScreenAds: 0
+  localRewardedFallbackToInterstitial: 1
+  localUISceneKeywords: splash,track,menu,loading,select,garage
+  localGameplaySceneKeywords: farming,game,level,play
+  environmentId: 
+--- !u!114 &1986916682475430442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1986916682475430438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7c64753e2ba91545a8392dacbf55511, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiSceneNames:
+  - MainMenu
+  - Splash
+  - Loading
+  - LoadingA
+  - LoadingB
+  appOpenExcludedScenes:
+  - Splash
+  - ATTScene
+  isAppPausedByAd: 0
+  IsFullscreenAdVisible: 0
+  uiScreenTransitionCount: 0
+  strategyAdCycleCount: 0
